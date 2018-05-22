@@ -1,0 +1,95 @@
+data first;
+input  name$ age gender$;
+datalines;
+
+ tanya 23 f
+ simran 22 f
+ sarthak 20 m 
+ riya 24 f
+ sri 23 m 
+ 
+ ;
+
+run;
+
+proc print data=first;
+
+run;
+
+/*here the new library has been created and results would show the details*/
+
+proc datasets lib=tanya;
+
+proc set ;
+run;
+data tanya.myfirst;
+set work.first;
+run;
+/* Generated Code (IMPORT) */
+/* Source File: adult.data.txt */
+/* Source Path: /home/joshitani950 */
+/* Code generated on: 5/22/18, 3:22 PM */
+
+%web_drop_table(TANYA.IMPORT);
+
+
+FILENAME REFFILE '/home/joshitani950/adult.data.txt';
+
+PROC IMPORT DATAFILE=REFFILE
+	DBMS=CSV
+	OUT=TANYA.IMPORT;
+	GETNAMES=NO;
+RUN;
+
+PROC CONTENTS DATA=TANYA.IMPORT; RUN;
+
+
+%web_open_table(TANYA.IMPORT);
+
+proc contents data=tanya.import varnum ;
+run;
+
+/*When not all observations are taken into account*/
+proc print data=tanya.myfirst (obs=2);
+run;
+
+proc print data=tanya.import (obs=12);
+run;
+ 
+/*Renaming some of the variables and deleting some others*/
+
+data tanya.import2 ; 
+/*note that a new data set has been created as tanya.import2 otherwise there was
+ a conitnous overwriting in the original file*/
+
+set tanya.import;
+rename  var1=age var2=employement;
+
+
+run;
+
+data tanya.import2 ;
+set tanya.import  (obs=50); /*number of observations have been limited here*/
+
+rename var1=age var2=employement;
+drop var3 var4 ;
+
+
+run;
+
+data tanya.import2 ;
+set tanya.import  ; 
+where var9="Black";
+rename var1=age var2=employement;
+drop var3 var4 ;
+
+/*note that a condition has been put. Also, Black is a string here so put it in inverted commas.*/ 
+run;
+data tanya.import2 ;
+set tanya.import (obs=1000) ;
+drop var9 ;
+run;
+
+
+
+run;
