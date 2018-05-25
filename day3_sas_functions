@@ -1,0 +1,79 @@
+proc print data = sashelp.baseball (obs =10);
+run; 
+
+data baseball2;
+set sashelp.baseball;
+logsalnew=int(logSalary);
+run;
+
+proc print data =baseball2 (obs =10);
+var logSalary logsalnew; 
+/*int fn converts decimals into integers.  */
+run; 
+
+data baseball2;
+set sashelp.baseball;
+team_new=substr(team, 2,1);
+/*we have given a command to read 1 character from second position  */
+run;
+proc print data=baseball2(obs=10);
+var team team_new;
+run;
+
+data baseball2;
+set sashelp.baseball;
+team_new=substr(team, 2,4);
+/*we have given a command to read 4 characters from second position  */
+run;
+proc print data=baseball2(obs=10);
+var team team_new;
+run;
+
+data baseball2;
+set sashelp.baseball;
+name_new=tranwrd(name,",", " ");
+run;
+
+proc print data=baseball2(obs=10);
+var name name_new;
+run;
+/*using the tranwrd fn i have successfully removed the comma that was present between the names.it  is basically a replacement function */
+
+data baseball2;
+set sashelp.baseball;
+position_new= index(position,"1");
+run;
+proc print data=baseball2;
+var position position_new;
+run;
+/* the index function is uesd to find the exact position of the particular string(which may be character or numeric) and if it is not present then value is returned as 0 */
+
+data baseball2;
+set sashelp.baseball;
+team_new= upcase(team);
+team_new2=lowcase(team);
+run;
+
+proc print data=baseball2;
+var team team_new team_new2;
+run;
+/*fn upcase converts the particular argument into uppercase and exactly opposite is for lowcase */
+
+
+
+/*THIS ENDS OUR DISCUSSION ON FUNCTIONS AND NOW WE BEGIN WITH CONDITIONAL MANIPULATION*/
+
+
+data tanya.import2;
+set tanya.import(obs=10);
+if var2="State-gov" then emp=1; else emp=0;
+run;
+
+proc print data=tanya.import2;
+var var2 emp;
+run;
+/*condition has been put here which is that if variable2 is State-gov then a new variable has been defined as emp which takes on the value 1 and 0 in other case.Also be careful about writing the exact string in inverted commas and their exact case should be defined.  */
+/* data is case sensitive so to avoid making errors we can manipultae the data into lowercase by lowcase function or into uppercase by upcase funtcion. */
+
+proc freq data=tanya.import2;
+tables var2*emp/ nocol nocum nopercent;run;
